@@ -80,7 +80,8 @@ if __name__ == "__main__":
     print("This will take a long time.")
     dataset = load_dataset(HF_DATASET)
     # dataset_num = 2  # Adjusting for testing purposes
-
+    dataset_num = len(dataset['train'])
+    
     # get output
     print(f"{'=' * 30}Get MLLM output{'=' * 30}")
     mllm_outputs = []
