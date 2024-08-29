@@ -3,6 +3,8 @@ from datasets import load_dataset
 import io
 import base64
 import json
+import requests
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 def pil2base64(pil_image):
@@ -13,14 +15,56 @@ def pil2base64(pil_image):
     return base64.b64encode(binary_data).decode('utf-8')
 
 
+def process_sample(pic_index, sample, text_input, headers, url, max_retry, max_tokens):
+    image = sample['image']
+    image_base64 = pil2base64(image)
+    image_url = f"data:image/jpeg;base64,{image_base64}"
+
+    payload = {
+        "model": MODEL,
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": text_input
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": image_url
+                        }
+                    }
+                ]
+            }
+        ],
+        "max_tokens": max_tokens
+    }
+
+    for i in range(max_retry):
+        try:
+            response = requests.post(url, headers=headers, json=payload, timeout=300)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+            response_json = response.json()
+            mllm_output = response_json['choices'][0]['message']['content']
+            return pic_index, mllm_output
+        except Exception as e:
+            print(f"Error: {e}. Retry {i + 1} out of {max_retry}")
+            continue
+    return pic_index, None  # If all retries fail, return None
+
+
 if __name__ == "__main__":
-
-    MODEL = "gpt-4o"
-    MAX_TOKENS = 300
-
+    max_retry = 5
+    MODEL = "gpt-4o-2024-05-13"
+    MAX_TOKENS = 500
+    MAX_WORKERS = 5  # Number of parallel threads
+    url = "your URL base"
+    
     PROMPT_FILE = "./eval_prompt.txt"
     HF_DATASET = "bonbon-rj/MLLM_eval_dataset"
-    SAVE_JSON_FILE = "./mllm_output.json"
+    SAVE_JSON_FILE = "./mllm_output_full.json"
     REQUEST_BY_OPENAI_CLIENT = False
 
     # get prompt
@@ -35,89 +79,42 @@ if __name__ == "__main__":
     print(f"{'=' * 30}Get dataset{'=' * 30}")
     print("This will take a long time.")
     dataset = load_dataset(HF_DATASET)
-    dataset_num = 2  # len(dataset['train'])
+    # dataset_num = 2  # Adjusting for testing purposes
 
     # get output
     print(f"{'=' * 30}Get MLLM output{'=' * 30}")
     mllm_outputs = []
 
     if REQUEST_BY_OPENAI_CLIENT:
-        client = OpenAI()
-        for pic_index in range(dataset_num):
-            print(f"Handing: {pic_index}")
-            sample = dataset['train'][pic_index]
-            image = sample['image']
-
-            image_base64 = pil2base64(image)
-            image_url = f"data:image/jpeg;base64,{image_base64}"
-
-            response = client.chat.completions.create(
-                model=MODEL,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": text_input
-                            },
-                            {
-                                "type": "image_url",
-                                "image_url": {"url": image_url, },
-                            },
-                        ],
-                    }
-                ],
-                max_tokens=MAX_TOKENS,
-            )
-
-            mllm_output = response.choices[0].message.content
-            print(mllm_output)
-            print()
-            mllm_outputs.append(mllm_output)
+        # Handle OpenAI client requests (omitted here)
+        pass
     else:
-        import requests
-        api_key = ''
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {api_key}"
+            "Caller": "yourname"
         }
-        for pic_index in range(dataset_num):
-            print(f"Handing: {pic_index}")
-            sample = dataset['train'][pic_index]
-            image = sample['image']
 
-            image_base64 = pil2base64(image)
-            image_url = f"data:image/jpeg;base64,{image_base64}"
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = [
+                executor.submit(
+                    process_sample, 
+                    pic_index,
+                    dataset['train'][pic_index], 
+                    text_input, 
+                    headers, 
+                    url, 
+                    max_retry, 
+                    MAX_TOKENS
+                )
+                for pic_index in range(dataset_num)
+            ]
 
-            payload = {
-                "model": MODEL,
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": text_input
-                            },
-                            {
-                                "type": "image_url",
-                                "image_url": {
-                                    "url": image_url
-                                }
-                            }
-                        ]
-                    }
-                ],
-                "max_tokens": MAX_TOKENS
-            }
-
-            response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload,timeout=200)
-            response_json = response.json()
-            mllm_output = response_json['choices'][0]['message']['content']
-            print(mllm_output)
-            print()
-            mllm_outputs.append(mllm_output)
+            for future in as_completed(futures):
+                pic_index, result = future.result()
+                if result:
+                    mllm_outputs.append({'pic_index': pic_index, 'output': result})
+                else:
+                    print(f"Failed to get output after retries for pic_index {pic_index}")
 
     # save
     with open(SAVE_JSON_FILE, 'w') as json_file:
