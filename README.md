@@ -4,20 +4,22 @@
 
 ### Script
 
-Script name: `get_MLLM_output.py`
+Script Name: `get_MLLM_output.py`
 
-Overview: This script utilizes OpenAI's MLLM model to generate responses based on a given `PROMPT_FILE` and images from a specified Hugging Face dataset (`HF_DATASET`). The responses are then saved in a JSON file (`SAVE_JSON_FILE`).
+Overview: This script leverages the MLLM models from OpenAI or Gemini to generate responses based on a given prompt and images from a Hugging Face dataset. The generated responses are saved in a JSON file.
 
-Implementation: The script reads images from the specified Hugging Face dataset in PIL format, converts them to base64 encoding, and then uses OpenAI's API to generate responses.
+Tips:
 
-Tips：
+Before using the script, please ensure the following:
 
-Before using the script, ensure the following:
+- The `API_TYPE` is correctly specified. It must be either `openai` or `gemini`.
+- Set the appropriate `api_key` environment variable based on the `API_TYPE`:
+  - For OpenAI, set the environment variable `OPENAI_API_KEY`.
 
-- `MODEL` is correctly specified.
-- `MAX_TOKENS` is set to a sufficient value.
-- `PROMPT_FILE` points to a valid prompt file.
-- `HF_DATASET` corresponds to the correct dataset.
-- `SAVE_JSON_FILE` is the correct path for saving the output.
+  - For Gemini, set the environment variable `GOOGLE_API_KEY`.
+- The `PROMPT_FILE` points to a valid prompt file.
+- The `HF_DATASET` corresponds to the correct dataset.
+- The `SAVE_JSON_FILE` is the correct path to save the output.
+- By default, the script calls the `"gpt-4o"` model for OpenAI and the `gemini-1.5-flash` model for Gemini. To modify this, update the `get_mllm_output` function accordingly.
 
-To perform small-batch testing, adjust the `dataset_num` parameter accordingly.
+For small batch testing, adjust the `dataset_num` parameter as needed.
