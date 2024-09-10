@@ -1,0 +1,4 @@
+pillow==10.4.0
+datasets==2.21.0
+google-generativeai==0.7.2
+openai==1.42.0
