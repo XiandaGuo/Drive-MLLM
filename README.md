@@ -1,5 +1,13 @@
 # Benchmark-For-MLLM
 
+
+
+## Dataset
+
+We are using the Hugging Face dataset [MLLM_eval_dataset](https://huggingface.co/datasets/bonbon-rj/MLLM_eval_dataset) for evaluation. The images are sourced from the `CAM_FRONT` in the validation set of [nuScenes](https://www.nuscenes.org/). We have provided a `metadata.jsonl` file for all images, allowing users to easily access properties such as `bbox`.
+
+
+
 ## Getting Started
 
 ### Setup Environment
@@ -44,7 +52,7 @@ export GOOGLE_API_KEY=your_api_key
 To generate responses using the MLLM model based on prompts and images from a Hugging Face dataset, run the following script. Be sure to set the `api_type` parameter to either `gemini` or `openai` depending on your API key:
 
 ```shell
-python get_MLLM_output.py --api_type gemini --prompt_file ./eval_prompt.txt
+python get_MLLM_output.py --api_type gemini --prompt_file ./eval_prompt.txt --hf_dataset bonbon-rj/MLLM_eval_dataset
 ```
 
 After running the script, you will receive a JSON file containing the results: `mllm_output_{api_type}.json`.
