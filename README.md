@@ -53,7 +53,6 @@ pip install flash-attn --no-build-isolation --no-cache-dir
 - For Local QWen2-VL inference:
 
 ```shell
-# QWen Environment
 git clone https://github.com/QwenLM/Qwen2-VL.git
 cd Qwen2-VL
 pip install -r requirements_web_demo.txt

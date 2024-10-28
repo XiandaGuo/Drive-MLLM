@@ -65,7 +65,7 @@ def main(config):
     # Load dataset from Hugging Face
     logger.info(f"{'=' * 50} Loading Dataset {'=' * 50}")
     dataset = load_dataset(hf_dataset, split='validation')
-    dataset_num = 1 # len(dataset)
+    dataset_num = len(dataset) # len(dataset)
     logger.info(f"Dataset loaded successfully with {dataset_num} data.")
 
     # Initialize inference interface based on the specified model type
