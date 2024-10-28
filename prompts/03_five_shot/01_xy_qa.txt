@@ -1,0 +1,37 @@
+Task Description:
+The primary goal of this task is to accurately identify and provide the coordinates of a specified object within a given image. Your task is to analyze the image, locate the object, and return its position in the form of coordinates [x, y].
+
+Question:
+Where is {} located in the image?
+
+Output Markers:
+- Start Marker: <OUTPUT FORMAT START>
+- End Marker: <OUTPUT FORMAT END>
+
+Mandatory Output Format:
+<OUTPUT FORMAT START>[x, y]<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the red balloon are (345, 789))
+Example 1:
+Question: "Where is the red balloon located in the image?"
+Answer: <OUTPUT FORMAT START>[345, 789]<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the blue toy are (152, 431))
+Example 2:
+Question: "Where is the blue toy located in the image?"
+Answer: <OUTPUT FORMAT START>[152, 431]<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the black cat are (211, 350))
+Example 3:
+Question: "Where is the black cat sitting in the image?"
+Answer: <OUTPUT FORMAT START>[211, 350]<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the green tree are (622, 977))
+Example 4:
+Question: "Where is the green tree located in the image?"
+Answer: <OUTPUT FORMAT START>[622, 977]<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the yellow house are (789, 214))
+Example 5:
+Question: "Where is the yellow house located in the image?"
+Answer: <OUTPUT FORMAT START>[789, 214]<OUTPUT FORMAT END>

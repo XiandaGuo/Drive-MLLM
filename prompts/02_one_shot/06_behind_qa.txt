@@ -1,0 +1,17 @@
+Task Description:
+In this task, you are required to determine whether one object is positioned behind another based on their z-values. The z-value indicates the depth position of an object, where a smaller z-value means the object is closer to the front. However, the coordinates of the objects will not be provided directly; you must infer or identify them yourself.
+
+Question:
+Is {} behind {}?
+
+Output Markers:
+- Start Marker: <OUTPUT FORMAT START>
+- End Marker: <OUTPUT FORMAT END>
+
+Mandatory Output Format:
+<OUTPUT FORMAT START>Yes/No<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the chair are (3, 6, 5) and the table are (1, 3, 2))
+Example:
+Question: "Is the chair behind the table?"
+Answer: <OUTPUT FORMAT START>Yes<OUTPUT FORMAT END>

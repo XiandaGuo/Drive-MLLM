@@ -1,0 +1,17 @@
+Task Description:
+In this task, you are tasked with determining which of two specific objects is positioned further to the left based on their x-coordinates. Note that the smaller the x-coordinate, the closer the object is to the left. However, the coordinates of the objects will not be provided directly; you must infer or identify them yourself.
+
+Question:
+Which is further left, {} or {}?
+
+Output Markers:
+- Start Marker: <OUTPUT FORMAT START>
+- End Marker: <OUTPUT FORMAT END>
+
+Mandatory Output Format:
+<OUTPUT FORMAT START>object<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the apple are (4, 2) and the banana are (2, 5))
+Example:
+Question: "Which is further left, the apple or the banana?"
+Answer: <OUTPUT FORMAT START>the banana<OUTPUT FORMAT END>

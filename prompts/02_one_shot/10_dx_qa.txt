@@ -1,0 +1,17 @@
+Task Description:
+The task involves calculating the horizontal distance between two specified objects, which is defined as the absolute difference in their x-coordinates. The formula used for this calculation is |x1 - x2|. However, the coordinates of the objects will not be provided directly; you must infer or identify them yourself.
+
+Question:
+What is the horizontal distance between {} and {}?
+
+Output Markers:
+- Start Marker: <OUTPUT FORMAT START>
+- End Marker: <OUTPUT FORMAT END>
+
+Mandatory Output Format:
+<OUTPUT FORMAT START>distance<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the lamp are (10.3, 4.2, 5.1) and the sofa  are (1.1, 8.7, 3.9))
+Example:
+Question: "What is the horizontal distance between the lamp and the sofa?"
+Answer: <OUTPUT FORMAT START>9.2<OUTPUT FORMAT END>

@@ -1,0 +1,37 @@
+Task Description:
+This task requires calculating the vertical distance from the camera to a specified object based on the object's z-coordinate. However, the coordinates of the objects will not be provided directly; you must infer or identify them yourself.
+
+Question:
+What is the camera's vertical distance from {}?
+
+Output Markers:
+- Start Marker: <OUTPUT FORMAT START>
+- End Marker: <OUTPUT FORMAT END>
+
+Mandatory Output Format:
+<OUTPUT FORMAT START>distance<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the toy are (4.5, 6.7, 1.3))
+Example 1:
+Question: "What is the camera's vertical distance from the toy?"
+Answer: <OUTPUT FORMAT START>1.3<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the tree are (2.3, 4.8, 2.5))
+Example 2:
+Question: "What is the camera's vertical distance from the tree?"
+Answer: <OUTPUT FORMAT START>2.5<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the building are (5.0, 7.1, 10.2))
+Example 3:
+Question: "What is the camera's vertical distance from the building?"
+Answer: <OUTPUT FORMAT START>10.2<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the cat are (1.2, 3.4, 0.4))
+Example 4:
+Question: "What is the camera's vertical distance from the cat?"
+Answer: <OUTPUT FORMAT START>0.4<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the lamp post are (3.5, 5.6, 4.3))
+Example 5:
+Question: "What is the camera's vertical distance from the lamp post?"
+Answer: <OUTPUT FORMAT START>4.3<OUTPUT FORMAT END>

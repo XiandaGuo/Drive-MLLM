@@ -1,0 +1,17 @@
+Task Description:
+This task involves calculating the Euclidean distance from a camera to a specific object within a scene. The formula used to determine this distance is: distance = sqrt(x^2 + y^2 + z^2). However, the coordinates of the objects will not be provided directly; you must infer or identify them yourself.
+
+Question:
+How far is the camera from {}?
+
+Output Markers:
+- Start Marker: <OUTPUT FORMAT START>
+- End Marker: <OUTPUT FORMAT END>
+
+Mandatory Output Format:
+<OUTPUT FORMAT START>distance<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the toy are (4.5, 6.7, 1.3))
+Example:
+Question: "How far is the camera from the toy?"
+Answer: <OUTPUT FORMAT START>8.2<OUTPUT FORMAT END>

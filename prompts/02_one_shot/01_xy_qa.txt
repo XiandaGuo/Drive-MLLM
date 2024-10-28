@@ -1,0 +1,18 @@
+Task Description:
+The primary goal of this task is to accurately identify and provide the coordinates of a specified object within a given image. Your task is to analyze the image, locate the object, and return its position in the form of coordinates [x, y].
+
+Question:
+Where is {} located in the image?
+
+Output Markers:
+- Start Marker: <OUTPUT FORMAT START>
+- End Marker: <OUTPUT FORMAT END>
+
+Mandatory Output Format:
+<OUTPUT FORMAT START>[x, y]<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the red balloon are (345, 789))
+Example:
+Question: "Where is the red balloon located in the image?"
+Answer: <OUTPUT FORMAT START>[345, 789]<OUTPUT FORMAT END>
+

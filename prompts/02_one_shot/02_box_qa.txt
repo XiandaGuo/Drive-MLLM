@@ -1,0 +1,17 @@
+Task Description:
+In this task, the primary objective is to accurately identify and determine the bounding box coordinates for a specific object within an image. A bounding box is a rectangular box that can be defined by a set of coordinates [min_x, min_y, max_x, max_y]. These coordinates correspond to the top-left corner (min_x, min_y) and the bottom-right corner (max_x, max_y) of the rectangle. 
+
+Question:
+What is the bounding box of {} in the image?
+
+Output Markers:
+- Start Marker: <OUTPUT FORMAT START>
+- End Marker: <OUTPUT FORMAT END>
+
+Mandatory Output Format:
+<OUTPUT FORMAT START>[min_x, min_y, max_x, max_y]<OUTPUT FORMAT END>
+
+(Assuming the bounding box of the cat is [120, 234, 560, 789])
+Example:
+Question: "What is the bounding box of the cat in the image?"
+Answer: <OUTPUT FORMAT START>[120, 234, 560, 789]<OUTPUT FORMAT END>

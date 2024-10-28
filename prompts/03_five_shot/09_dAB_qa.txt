@@ -1,0 +1,37 @@
+Task Description:
+The task requires calculating the Euclidean distance between two specific objects located in a three-dimensional space. The Euclidean distance is computed using the formula: distance = sqrt((x1 - x2)^2 + (y1 - y2)^2 + (z1 - z2)^2). However, the coordinates of the objects will not be provided directly; you must infer or identify them yourself.
+
+Question:
+How far apart are {} and {}?
+
+Output Markers:
+- Start Marker: <OUTPUT FORMAT START>
+- End Marker: <OUTPUT FORMAT END>
+
+Mandatory Output Format:
+<OUTPUT FORMAT START>distance<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the lamp are (10, 4, 5) and the sofa are (1, 8, 3))
+Example 1:
+Question: "How far apart are the lamp and the sofa?"
+Answer: <OUTPUT FORMAT START>10.1<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the bookshelf are (7, 2, 9) and the coffee table are (3, 7, 4))
+Example 2:
+Question: "How far apart are the bookshelf and the coffee table?"
+Answer: <OUTPUT FORMAT START>8.1<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the computer are (14, 7, 1) and the chair are (9, 12, 2))
+Example 3:
+Question: "How far apart are the computer and the chair?"
+Answer: <OUTPUT FORMAT START>7.1<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the television are (2, 10, 5) and the refrigerator are (8, 15, 9))
+Example 4:
+Question: "How far apart are the television and the refrigerator?"
+Answer: <OUTPUT FORMAT START>8.8<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the window are (11, 6, 8) and the door are (3, 11, 5))
+Example 5:
+Question: "How far apart are the window and the door?"
+Answer: <OUTPUT FORMAT START>9.9<OUTPUT FORMAT END>

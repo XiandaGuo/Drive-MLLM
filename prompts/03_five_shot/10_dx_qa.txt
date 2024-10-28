@@ -1,0 +1,37 @@
+Task Description:
+The task involves calculating the horizontal distance between two specified objects, which is defined as the absolute difference in their x-coordinates. The formula used for this calculation is |x1 - x2|. However, the coordinates of the objects will not be provided directly; you must infer or identify them yourself.
+
+Question:
+What is the horizontal distance between {} and {}?
+
+Output Markers:
+- Start Marker: <OUTPUT FORMAT START>
+- End Marker: <OUTPUT FORMAT END>
+
+Mandatory Output Format:
+<OUTPUT FORMAT START>distance<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the lamp are (10.3, 4.2, 5.1) and the sofa are (1.1, 8.7, 3.9))
+Example 1:
+Question: "What is the horizontal distance between the lamp and the sofa?"
+Answer: <OUTPUT FORMAT START>9.2<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the cat are (15.7, 10.4, 6.1) and the dog are (8.3, 12.5, 7.2))
+Example 2:
+Question: "What is the horizontal distance between the cat and the dog?"
+Answer: <OUTPUT FORMAT START>7.4<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the tree are (30.5, 20.1, 15.9) and the flower are (23.6, 25.3, 10.1))
+Example 3:
+Question: "What is the horizontal distance between the tree and the flower?"
+Answer: <OUTPUT FORMAT START>6.9<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the bookshelf are (8.1, 4.9, 9.3) and the chair are (5.5, 3.1, 7.4))
+Example 4:
+Question: "What is the horizontal distance between the bookshelf and the chair?"
+Answer: <OUTPUT FORMAT START>2.6<OUTPUT FORMAT END>
+
+(Assuming the coordinates for the computer are (18.4, 14.1, 12.3) and the window are (10.9, 15.4, 11.2))
+Example 5:
+Question: "What is the horizontal distance between the computer and the window?"
+Answer: <OUTPUT FORMAT START>7.5<OUTPUT FORMAT END>
