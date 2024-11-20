@@ -20,7 +20,7 @@ class Qwen2VLInterface:
         self.processor = AutoProcessor.from_pretrained(model_name)
 
         
-    def inference(self, pil_image: Image.Image, prompt: str, max_tokens: int = 300):
+    def inference(self, pil_image: Image.Image, prompt: str, max_tokens: int = 4096):
         
         image_base64 = pil2base64(pil_image)
         image_url = f"data:image;base64,{image_base64}"

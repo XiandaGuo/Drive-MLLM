@@ -61,9 +61,8 @@ def main(config):
     save_dir = Path(config.save_dir)
     prompt_files_dir_list_dir = Path(config.prompts_dir)
     
-
     # Load dataset from Hugging Face
-    logger.info(f"{'=' * 50} Loading Dataset {'=' * 50}")
+    logger.info(f"Loading Dataset...")
     dataset = load_dataset(hf_dataset, split='validation')
     dataset_num = len(dataset) # len(dataset)
     logger.info(f"Dataset loaded successfully with {dataset_num} data.")
@@ -186,16 +185,15 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Generate outputs using the MLLM model.")
     parser.add_argument('--model_type', type=str, default='gemini',
-                        help='Specify the type of model to use.')
+                        help='Specify the type of model to be used.')
     parser.add_argument('--model', type=str, default='models/gemini-1.5-flash',
                         help='Specify the name of the model within the selected type.')
     parser.add_argument('--hf_dataset', type=str, default='bonbon-rj/MLLM_eval_dataset',
-                        help='Path to the Hugging Face dataset.')
-    parser.add_argument('--prompts_dir', type=str, default='./prompts',
-                        help='Directory containing the input prompt files.')
-    parser.add_argument('--save_dir', type=str, default='./mllm_outputs',
-                        help='Directory where generated output files will be stored.')
-
+                        help='Specify the path to the Hugging Face dataset.')
+    parser.add_argument('--prompts_dir', type=str, default='prompt/prompts',
+                        help='Specify the directory that contains the input prompt files.')
+    parser.add_argument('--save_dir', type=str, default='inference/mllm_outputs',
+                        help='Define the directory where the generated output files will be saved.')
     args = parser.parse_args()
     main(args)
 

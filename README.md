@@ -1,4 +1,4 @@
-# Benchmark-For-MLLM
+# Drive-MLLM
 
 
 ## Dataset
@@ -14,12 +14,16 @@ We are using the Hugging Face dataset [MLLM_eval_dataset](https://huggingface.co
 To get started, clone the repository and set up a conda environment with the required packages:
 
 ```shell
-git clone https://github.com/XiandaGuo/Benchmark-For-MLLM.git
-cd Benchmark-For-MLLM
+git clone https://github.com/XiandaGuo/Drive-MLLM.git
+cd Drive-MLLM
 
-conda create -n mllm_benchmark python=3.10
-source activate mllm_benchmark
+conda create -n drive_mllm python=3.10
+source activate drive_mllm
 pip install -r requirements.txt
+
+# setup PYTHONPATH
+echo 'export PYTHONPATH=$(pwd):$PYTHONPATH' >> ~/.bashrc
+source ~/.bashrc
 ```
 
 ### Additional Environment Setup
@@ -77,7 +81,7 @@ pip install flash-attn --no-build-isolation --no-cache-dir
 
 
 
-## Get MLLM Output
+### Inference
 
 Run inference according to your requirements:
 - For GPT API calls:
@@ -85,12 +89,12 @@ Run inference according to your requirements:
 ```shell
 export OPENAI_API_KEY=your_api_key
 
-python get_MLLM_output.py \
+python inference/get_MLLM_output.py \
 --model_type gpt \
 --model gpt-4o \
 --hf_dataset bonbon-rj/MLLM_eval_dataset \
---prompts_dir ./prompts \
---save_dir ./mllm_outputs
+--prompts_dir prompt/prompts \
+--save_dir inference/mllm_outputs
 ```
 
 - For Gemini API calls:
@@ -98,35 +102,72 @@ python get_MLLM_output.py \
 ```shell
 export GOOGLE_API_KEY=your_api_key
 
-python get_MLLM_output.py \
+python inference/get_MLLM_output.py \
 --model_type gemini \
 --model models/gemini-1.5-flash \
 --hf_dataset bonbon-rj/MLLM_eval_dataset \
---prompts_dir ./prompts \
---save_dir ./mllm_outputs
+--prompts_dir prompt/prompts \
+--save_dir inference/mllm_outputs
 ```
 
 - For Local LLaVA-Next inference:
 ```shell
-# run LLaVA-OneVision
-python get_MLLM_output.py \
+python inference/get_MLLM_output.py \
 --model_type llava \
 --model lmms-lab/llava-onevision-qwen2-7b-si \
 --hf_dataset bonbon-rj/MLLM_eval_dataset \
---prompts_dir ./prompts \
---save_dir ./mllm_outputs
+--prompts_dir prompt/prompts \
+--save_dir inference/mllm_outputs
 ```
 
 - For Local QWen2-VL inference:
 ```shell
-python get_MLLM_output.py \
+python inference/get_MLLM_output.py \
 --model_type qwen \
 --model Qwen/Qwen2-VL-7B-Instruct \
 --hf_dataset bonbon-rj/MLLM_eval_dataset \
---prompts_dir ./prompts \
---save_dir ./mllm_outputs
+--prompts_dir prompt/prompts \
+--save_dir inference/mllm_outputs
 ```
 
-After executing the script, the results will be saved in the directory: `{save_dir}/{model_type}`.
 
+
+Run script to get the random output for the prompts:
+
+```shell
+python inference/get_random_output.py \
+--hf_dataset bonbon-rj/MLLM_eval_dataset \
+--prompts_dir prompt/prompts \
+--save_dir inference/mllm_outputs
+```
+
+
+
+After executing the script, the results will be saved in the directory: `{save_dir}/{model_type}/{model}`.
+
+
+
+### Evaluation
+
+You can execute the script below to evaluate all results located in `eval_root_dir`:
+
+```shell
+python evaluation/eval_from_json.py \
+--hf_dataset bonbon-rj/MLLM_eval_dataset \
+--eval_root_dir inference/mllm_outputs \
+--save_dir evaluation/eval_result \
+--eval_model_path all 
+```
+
+Alternatively, you can also run the following script to evaluate a specific result under `eval_root_dir` by specifying a model `eval_model_path`:
+
+```shell
+python evaluation/eval_from_json.py \
+--hf_dataset bonbon-rj/MLLM_eval_dataset \
+--eval_root_dir inference/mllm_outputs \
+--save_dir evaluation/eval_result \
+--eval_model_path gemini/gemini-1.5-flash
+```
+
+After running the scripts, the evaluation results will be stored in the directory: `{save_dir}`.
 
