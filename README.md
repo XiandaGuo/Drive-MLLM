@@ -1,15 +1,26 @@
-# Drive-MLLM
+# DriveMLLM: A Benchmark for Spatial Understanding with Multimodal Large Language Models in Autonomous Driving
+
+### [Paper](https://arxiv.org/abs/2411.13112)
+
+> [DriveMLLM: A Benchmark for Spatial Understanding with Multimodal Large Language Models in Autonomous Driving](https://arxiv.org/abs/2411.13112)
+
+> [Xianda Guo*](https://scholar.google.com/citations?user=jPvOqgYAAAAJ), Ruijun Zhang*, [Yiqun Duan*](https://scholar.google.com.hk/citations?user=NmwjI0AAAAAJ&hl=zh-CN), Yuhang He, Chenming Zhang, Long Chen.
+
+## News 
+- **[2024/11]** Paper released on [arXiv](https://arxiv.org/abs/2411.13112).
 
 
-## Dataset
-
-We are using the Hugging Face dataset [MLLM_eval_dataset](https://huggingface.co/datasets/bonbon-rj/MLLM_eval_dataset) for evaluation. The images are sourced from the `CAM_FRONT` in the validation set of [nuScenes](https://www.nuscenes.org/). We have provided a `metadata.jsonl` file for all images, allowing users to easily access properties such as `location2D`.
 
 
 
 ## Getting Started
 
-### Setup Environment
+### 0.Prepare Dataset
+
+We are using the Hugging Face dataset [MLLM_eval_dataset](https://huggingface.co/datasets/bonbon-rj/MLLM_eval_dataset) for evaluation. The images are sourced from the `CAM_FRONT` in the validation set of [nuScenes](https://www.nuscenes.org/). We have provided a `metadata.jsonl` file for all images, allowing users to easily access properties such as `location2D`.
+
+
+### 1.Setup Environment
 
 To get started, clone the repository and set up a conda environment with the required packages:
 
@@ -81,7 +92,7 @@ pip install flash-attn --no-build-isolation --no-cache-dir
 
 
 
-### Inference
+### 2.Inference
 
 Run inference according to your requirements:
 - For GPT API calls:
@@ -147,7 +158,7 @@ After executing the script, the results will be saved in the directory: `{save_d
 
 
 
-### Evaluation
+### 3.Evaluation
 
 You can execute the script below to evaluate all results located in `eval_root_dir`:
 
@@ -170,4 +181,12 @@ python evaluation/eval_from_json.py \
 ```
 
 After running the scripts, the evaluation results will be stored in the directory: `{save_dir}`.
-
+## Citation
+```
+@article{DriveMLLM,
+        title={DriveMLLM: A Benchmark for Spatial Understanding with Multimodal Large Language Models in Autonomous Driving},
+        author={Guo, Xianda and Zhang Ruijun and Duan Yiqun and He Yuhang and Zhang, Chenming and Chen, Long},
+        journal={arXiv preprint arXiv:2411.13112},
+        year={2024}
+}
+```
