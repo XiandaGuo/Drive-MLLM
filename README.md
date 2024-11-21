@@ -10,11 +10,6 @@
 - **[2024/11]** Paper released on [arXiv](https://arxiv.org/abs/2411.13112).
 
 
-## Overall
-
-![vis]()
-
-
 ## Getting Started
 
 ### 0.Prepare Dataset
