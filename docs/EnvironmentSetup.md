@@ -20,6 +20,7 @@ Depending on your needs, set up the following environments for API calls or loca
 
 ```shell
 pip install openai==1.42.0
+pip install httpx==0.27.2
 ```
 
 - For Gemini API calls:
@@ -55,8 +56,10 @@ cd ..
 ## flash atten (optional)
 conda install -c "nvidia/label/cuda-12.1.0" cuda
 pip install flash-attn --no-build-isolation --no-cache-dir
-```
 
+## for Qwen2.5
+pip install -U git+https://github.com/huggingface/transformers@main
+```
 
 **Reference Links**:
 

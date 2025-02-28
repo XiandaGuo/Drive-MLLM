@@ -1,0 +1,13 @@
+Task Description:
+The primary goal of this task is to determine the relative left-right positioning of the two objects from the camera's perspective.
+
+Question:
+Which is further {}, {} or {}?
+
+Options:
+- {}
+- {}
+- Almost the same
+
+Mandatory Output Format:
+{}Option{}

@@ -9,7 +9,7 @@ class GptInterface:
         self.client = OpenAI(api_key=api_key)
     
     
-    def inference(self, pil_image: Image.Image, prompt: str, model: str, max_tokens: int = 300) -> str:
+    def inference(self, pil_image: Image.Image, prompt: str, model: str, max_tokens: int = 4096) -> str:
 
         try:
             # Fetch the list of supported models from the OpenAI API

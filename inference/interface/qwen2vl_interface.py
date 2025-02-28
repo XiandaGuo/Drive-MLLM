@@ -6,17 +6,26 @@ from utils import pil2base64
 
 class Qwen2VLInterface:
 
-    def __init__(self, model_name) -> None:
+    def __init__(self, model_name, not25 = True) -> None:
         
-        # model = Qwen2VLForConditionalGeneration.from_pretrained(
-        #     model_name, torch_dtype="auto", device_map="auto"
-        # )
-        self.model = Qwen2VLForConditionalGeneration.from_pretrained(
-            model_name,
-            torch_dtype=torch.bfloat16,
-            attn_implementation="flash_attention_2",
-            device_map="auto",
-        )
+        if not25:
+            # model = Qwen2VLForConditionalGeneration.from_pretrained(
+            #     model_name, torch_dtype="auto", device_map="auto"
+            # )
+            self.model = Qwen2VLForConditionalGeneration.from_pretrained(
+                model_name,
+                torch_dtype=torch.bfloat16,
+                attn_implementation="flash_attention_2",
+                device_map="auto",
+            )
+        else:
+            from transformers import Qwen2_5_VLForConditionalGeneration
+            self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                model_name,
+                torch_dtype=torch.bfloat16,
+                attn_implementation="flash_attention_2",
+                device_map="auto",
+            )
         self.processor = AutoProcessor.from_pretrained(model_name)
 
         

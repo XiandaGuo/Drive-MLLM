@@ -1,0 +1,13 @@
+Task Description:
+The primary goal of this task is to determine the relative front-back positioning of the two objects from the camera's perspective, where the object farther from the camera is considered to be more forward.
+
+Question:
+Is {} {} {}?
+
+Options:
+- Yes
+- No
+- Almost the same in terms of front-back position
+
+Mandatory Output Format:
+{}Option{}

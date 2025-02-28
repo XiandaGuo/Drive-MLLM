@@ -1,0 +1,13 @@
+Task Description:
+The primary goal of this task is to estimate the vertical distance of the specified object in the image from the camera, which is positioned at the origin. You need to analyze the image and choose the correct range of distance from the camera based on the visual cues provided.
+
+Question:
+How far is the vertical distance of {} in the picture from the camera?
+
+Options:
+- {}
+- {}
+- {}
+
+Mandatory Output Format:
+{}Option{}

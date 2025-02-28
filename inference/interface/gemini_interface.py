@@ -7,7 +7,7 @@ class GeminiInterface:
         genai.configure(api_key=api_key, transport='rest')
         
 
-    def inference(self, pil_image: Image.Image, prompt: str, model: str) -> str:
+    def inference(self, pil_image: Image.Image, prompt: str, model: str, max_tokens: int = 4096) -> str:
         try:
 
             # Fetch the list of supported models from the Gemini API
@@ -21,7 +21,7 @@ class GeminiInterface:
             generative_model = genai.GenerativeModel(model_name=model)
 
             # Generate content using the model, prompt, and image
-            output = generative_model.generate_content([prompt, pil_image]).text
+            output = generative_model.generate_content([pil_image, prompt], max_output_tokens=max_tokens).text
 
             return output
 

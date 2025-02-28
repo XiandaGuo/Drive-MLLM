@@ -1,0 +1,13 @@
+Task Description: 
+The primary goal of this task is to determine which of the two objects is closer to the camera that captured the image below. You need to assess the relative distance between the two objects based on the camera's perspective.
+
+Question: 
+Which object, {} or {}, is {} to the camera?
+
+Options:
+- {}
+- {}
+- Almost the same
+
+Mandatory Output Format: 
+{}Option{}
