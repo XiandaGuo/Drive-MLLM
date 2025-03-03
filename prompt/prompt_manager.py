@@ -21,4 +21,3 @@ class PromptManager:
         self.end_marker = "<OUTPUT FORMAT END>"
         self.markers = [self.start_marker, self.end_marker]
         self.pattern = self.start_marker + r"(.*?)" + self.end_marker
-

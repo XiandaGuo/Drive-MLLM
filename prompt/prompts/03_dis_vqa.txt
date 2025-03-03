@@ -9,5 +9,6 @@ Options:
 - {}
 - Almost the same
 
-Mandatory Output Format: 
-{}Option{}
+Mandatory Output Format:
+(Reasoning steps)
+{}(Final option as the answer){}

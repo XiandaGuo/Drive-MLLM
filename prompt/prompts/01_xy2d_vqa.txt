@@ -5,4 +5,5 @@ Question:
 Where is {} located in the image?
 
 Mandatory Output Format:
-{}[x, y]{}
+(Reasoning steps)
+{}(Final coordinates [x, y] as the answer){}

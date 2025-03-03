@@ -10,4 +10,5 @@ Options:
 - Almost the same
 
 Mandatory Output Format:
-{}Option{}
+(Reasoning steps)
+{}(Final option as the answer){}

@@ -25,7 +25,9 @@ We are using the Hugging Face dataset [DriveMLLM](https://huggingface.co/dataset
 
 Run the following code to download the dataset, generate the VQAs, and save them in the `eval_vqas` folder.
 ```shell
-python hfdata_to_VQA.py
+python hfdata_to_eval_vqa.py \
+--hf_dataset bonbon-rj/DriveMLLM \
+--vqas_save_dir eval_vqas
 ```
 
 ### 3. Inference
@@ -64,7 +66,7 @@ python inference/get_mllm_output.py \
 --save_dir inference/mllm_outputs
 ```
 
-- For Local QWen2-VL inference:
+- For Local QWen2.5-VL inference:
 ```shell
 python inference/get_mllm_output.py \
 --model_type qwen \

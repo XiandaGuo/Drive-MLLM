@@ -5,10 +5,11 @@ Question:
 Which direction is {} facing in the image?
 
 Options: 
-- {} 
-- {} 
+- {}
+- {}
 - {}
 - {}
 
-Mandatory Output Format: 
-{}Option{}
+Mandatory Output Format:
+(Reasoning steps)
+{}(Final option as the answer){}

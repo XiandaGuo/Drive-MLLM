@@ -5,6 +5,7 @@ from prompt.prompt_manager import PromptManager
 from pathlib import Path
 import json
 from tqdm import tqdm
+import argparse
 
 def format_range(input_list):
     if len(input_list) == 2:
@@ -59,13 +60,13 @@ def generate_depth_range(depth):
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-if __name__ == "__main__":
+def main(config):
 
     # Set a random seed for reproducibility
     random.seed(42)
     
     # Load dataset from Hugging Face
-    hf_dataset = "bonbon-rj/DriveMLLM"
+    hf_dataset = args.hf_dataset
     logger.info(f"Loading Dataset...")
     dataset = load_dataset(hf_dataset, split='validation')
     dataset_num = len(dataset) # len(dataset)
@@ -79,7 +80,7 @@ if __name__ == "__main__":
     prm_mgr = PromptManager()
 
     # create dir
-    vqas_save_dir = Path("./eval_vqas")
+    vqas_save_dir = Path(config.vqas_save_dir)
     vqas_save_dir.mkdir(exist_ok=True)
     image_save_dir = vqas_save_dir / "image"
     image_save_dir.mkdir(exist_ok=True)
@@ -269,6 +270,17 @@ if __name__ == "__main__":
         
        
 
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description="Generate vqas from Hugging Face hub.")
+
+    parser.add_argument('--hf_dataset', type=str, default='bonbon-rj/DriveMLLM',
+                        help='Specify the path to the Hugging Face dataset.')
+    parser.add_argument('--vqas_save_dir', type=str, default='eval_vqas',
+                        help='Define the directory where the vqas files will be saved.')
+
+    args = parser.parse_args()
+    main(args)
 
 
 

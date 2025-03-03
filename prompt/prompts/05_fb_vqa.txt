@@ -10,4 +10,5 @@ Options:
 - Almost the same in terms of front-back position
 
 Mandatory Output Format:
-{}Option{}
+(Reasoning steps)
+{}(Final option as the answer){}
