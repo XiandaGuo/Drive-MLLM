@@ -9,6 +9,7 @@ Options:
 - {}
 - {}
 
-Mandatory Output Format:
-(Reasoning steps)
-{}(Final option as the answer){}
+Reason carefully and step-by-step under the <think> tag to ensure logical accuracy and robustness, including any relevant error checks.
+Finally, provide a concise and definitive response in the <answer> tag. Use the following format:
+<think>[Step-by-step reasoning with attention to detail and potential error checks]</think>
+<answer>[Final answer]</answer>

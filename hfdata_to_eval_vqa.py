@@ -1,22 +1,26 @@
 import logging
-from datasets import load_dataset
 import random
-from prompt.prompt_manager import PromptManager
-from pathlib import Path
-import json
-from tqdm import tqdm
 import argparse
+import json
+from pathlib import Path
+from tqdm import tqdm
+from datasets import load_dataset
+from prompt.prompt_manager import PromptManager
 
-def format_range(input_list):
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+def format_range(input_list: list[int]) -> str:
+    """Format a numeric range into a human-readable string."""
     if len(input_list) == 2:
         return f"Between {input_list[0]} {'meter' if input_list[0] <= 1 else 'meters'} and {input_list[1]} {'meter' if input_list[1] <= 1 else 'meters'}"
     else:
         raise ValueError("Range fotmat error")
 
-def generate_depth_range(depth):
+def generate_depth_range(depth: float) -> tuple[list[int], list[int], list[int]]:
+    """Generate the correct depth range and two distractor ranges depending on the depth value."""
     answer = depth
     if answer < 7:
-        # 6.9 -> (3, 10) (12, 16) (18, 22)
         answer_len = random.uniform(6, 7)
         answer_range = [max(1, round(answer - answer_len / 2)), round(answer + answer_len / 2)]
 
@@ -28,7 +32,6 @@ def generate_depth_range(depth):
         range3 = [range3_start, range3_end]
 
     elif answer > 15:
-        # 15.1 -> (12, 19) (6, 10) (1, 4)
         answer_len = random.uniform(6, 7)
         answer_range = [round(answer - answer_len / 2), round(answer + answer_len / 2)]
 
@@ -40,8 +43,6 @@ def generate_depth_range(depth):
         range3 = [range3_start, range3_end]
 
     else:
-        # 7 - 15
-        # 15.1 -> (12, 19) (6, 10) (1, 4)
         answer_len = random.uniform(6, 7)
         answer_range = [round(answer - answer_len / 2), round(answer + answer_len / 2)]
 
@@ -57,9 +58,6 @@ def generate_depth_range(depth):
     return answer_range, range2, range3
 
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
 def main(config):
 
     # Set a random seed for reproducibility
@@ -69,15 +67,15 @@ def main(config):
     hf_dataset = args.hf_dataset
     logger.info(f"Loading Dataset...")
     dataset = load_dataset(hf_dataset, split='validation')
-    dataset_num = len(dataset) # len(dataset)
+    dataset_num = len(dataset) 
     logger.info(f"Dataset loaded successfully with {dataset_num} data.")
 
-    # Get image_name from dataset
+    # Extract image file names from dataset metadata
     image_names = [Path(k).name for k in dataset.info.download_checksums.keys() if Path(k).suffix == '.webp']
-    assert len(image_names) == dataset_num
+    assert len(image_names) == dataset_num, "Mismatch between images and samples."
     
     # prompt manager
-    prm_mgr = PromptManager()
+    prm_mgr = PromptManager(prompt_dir=config.prompt_dir)
 
     # create dir
     vqas_save_dir = Path(config.vqas_save_dir)
@@ -100,7 +98,7 @@ def main(config):
 
         # image save
         image_save_path = str(image_save_dir / image_names[data_index])
-        image.save(image_save_path)
+        image.save(image_save_path) 
         width, height = image.size
 
         # iter multi object
@@ -114,8 +112,8 @@ def main(config):
                     obj2 = 'the ' + obj_descs[idx2]
 
                     # dis vqa
-                    dis_c_vqa_prompt = prm_mgr.dis_vqa_template.format(obj1, obj2, "closer", obj1.capitalize(), obj2.capitalize(), *prm_mgr.markers)
-                    dis_f_vqa_prompt = prm_mgr.dis_vqa_template.format(obj1, obj2, "farther", obj1.capitalize(), obj2.capitalize(), *prm_mgr.markers)
+                    dis_c_vqa_prompt = prm_mgr.dis_vqa_template.format(obj1, obj2, "closer", obj1.capitalize(), obj2.capitalize())
+                    dis_f_vqa_prompt = prm_mgr.dis_vqa_template.format(obj1, obj2, "farther", obj1.capitalize(), obj2.capitalize())
                     obj1_dis = obj_dists[idx1]
                     obj2_dis = obj_dists[idx2]
                     dis_threshold = 1
@@ -134,8 +132,8 @@ def main(config):
                     dis_vqa.append(dis_f_save_dict)
                     
                     # lr vqa
-                    l_vqa_prompt = prm_mgr.lr_vqa_template.format('left', obj1, obj2, obj1.capitalize(), obj2.capitalize(), *prm_mgr.markers)
-                    r_vqa_prompt = prm_mgr.lr_vqa_template.format('right', obj1, obj2, obj1.capitalize(), obj2.capitalize(), *prm_mgr.markers)
+                    l_vqa_prompt = prm_mgr.lr_vqa_template.format('left', obj1, obj2, obj1.capitalize(), obj2.capitalize())
+                    r_vqa_prompt = prm_mgr.lr_vqa_template.format('right', obj1, obj2, obj1.capitalize(), obj2.capitalize())
                     obj1_x = obj_xy2Ds[idx1][0]
                     obj2_x = obj_xy2Ds[idx2][0]
                     x_threshold = 100
@@ -154,8 +152,8 @@ def main(config):
                     lr_vqa.append(r_save_dict)
                     
                     # fb vqa
-                    f_vqa_prompt = prm_mgr.fb_vqa_template.format(obj1, "in front of", obj2, *prm_mgr.markers)
-                    b_vqa_prompt = prm_mgr.fb_vqa_template.format(obj1, "behind", obj2, *prm_mgr.markers)
+                    f_vqa_prompt = prm_mgr.fb_vqa_template.format(obj1, "in front of", obj2)
+                    b_vqa_prompt = prm_mgr.fb_vqa_template.format(obj1, "behind", obj2)
                     obj1_d = obj_depths[idx1]
                     obj2_d = obj_depths[idx2]
                     d_threshold = 0.5
@@ -215,7 +213,6 @@ def main(config):
         if not Path(image_save_path).exists():
             image.save(image_save_path)
 
-        
         # yaw vqa
         obj = 'the ' + obj_descs[0]
         obj_yaw_desc = obj_yaw_descs[0]
@@ -228,20 +225,20 @@ def main(config):
         else:
             raise ValueError("Yaw option error")
         n_yaw_answer = obj_yaw_desc
-        n_yaw_vqa_prompt = prm_mgr.yaw_vqa_template.format("North", obj , *yaw_options, *prm_mgr.markers)
+        n_yaw_vqa_prompt = prm_mgr.yaw_vqa_template.format("North", obj , *yaw_options)
         n_yaw_save_dict = dict(image_path=image_save_path, image_pixel=f"{width}x{height}", obj_bbox=bbox, prompt=n_yaw_vqa_prompt, answer=n_yaw_answer)
         opposite_map = {
             'North': 'South', 'South': 'North', 'East': 'West', 'West': 'East',
             'Northeast': 'Southwest', 'Southeast': 'Northwest', 'Southwest': 'Northeast', 'Northwest': 'Southeast'
         }
         s_yaw_answer = opposite_map[obj_yaw_desc]
-        s_yaw_vqa_prompt = prm_mgr.yaw_vqa_template.format("South", obj , *yaw_options, *prm_mgr.markers)
+        s_yaw_vqa_prompt = prm_mgr.yaw_vqa_template.format("South", obj , *yaw_options)
         s_yaw_save_dict = dict(image_path=image_save_path, image_pixel=f"{width}x{height}", obj_bbox=bbox, prompt=s_yaw_vqa_prompt, answer=s_yaw_answer)
         yaw_vqa.append(n_yaw_save_dict)
         yaw_vqa.append(s_yaw_save_dict)
 
         # xy2d vqa
-        xy2d_vqa_prompt = prm_mgr.xy2d_vqa_template.format(obj, *prm_mgr.markers)
+        xy2d_vqa_prompt = prm_mgr.xy2d_vqa_template.format(obj)
         obj_xy2d = obj_xy2ds[0]
         xy2d_answer = str(obj_xy2d)
         xy2d_save_dict = dict(image_path=image_save_path, image_pixel=f"{width}x{height}", obj_bbox=bbox, prompt=xy2d_vqa_prompt, answer=xy2d_answer)
@@ -251,7 +248,7 @@ def main(config):
         obj_depth = obj_depths[0]
         answer_option, depth_option1, depth_option2 = generate_depth_range(obj_depth)
         depth_options = random.sample([format_range(answer_option), format_range(depth_option1), format_range(depth_option2)], k=3)
-        depth_vqa_prompt = prm_mgr.depth_vqa_template.format(obj, *depth_options, *prm_mgr.markers)
+        depth_vqa_prompt = prm_mgr.depth_vqa_template.format(obj, *depth_options)
         depth_answer = format_range(answer_option)
         depth_save_dict = dict(image_path=image_save_path, image_pixel=f"{width}x{height}", obj_bbox=bbox, prompt=depth_vqa_prompt, answer=depth_answer)
         depth_vqa.append(depth_save_dict)
@@ -267,18 +264,14 @@ def main(config):
     with open(str(depth_vqas_save_json), 'w') as file:
         json.dump(depth_vqa, file, indent=4)
 
-        
-       
-
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description="Generate vqas from Hugging Face hub.")
-
-    parser.add_argument('--hf_dataset', type=str, default='bonbon-rj/DriveMLLM',
+    parser = argparse.ArgumentParser(description="Generate VQAs from a Hugging Face hub.")
+    parser.add_argument('--hf_dataset', type=str, default='',
                         help='Specify the path to the Hugging Face dataset.')
-    parser.add_argument('--vqas_save_dir', type=str, default='eval_vqas',
-                        help='Define the directory where the vqas files will be saved.')
-
+    parser.add_argument('--vqas_save_dir', type=str, default='',
+                        help='Define the directory where the VQA files will be saved.')
+    parser.add_argument('--prompt_dir', type=str, default='',
+                        help='Set the directory containing prompt templates.')
     args = parser.parse_args()
     main(args)
 

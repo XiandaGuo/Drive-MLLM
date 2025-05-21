@@ -1,7 +1,7 @@
 from pathlib import Path
 
 class PromptManager:
-    def __init__(self, prompt_dir="./prompt/prompts"):
+    def __init__(self, prompt_dir):
         self.prompt_dir = Path(prompt_dir)
         self.prompt_files = sorted(self.prompt_dir.iterdir(), key=lambda x: x.name)
 
@@ -17,7 +17,7 @@ class PromptManager:
             with open(file_path) as f:
                 setattr(self, name, f.read())
   
-        self.start_marker = "<OUTPUT FORMAT START>"
-        self.end_marker = "<OUTPUT FORMAT END>"
+        self.start_marker = "<answer>"
+        self.end_marker = "</answer>"
         self.markers = [self.start_marker, self.end_marker]
         self.pattern = self.start_marker + r"(.*?)" + self.end_marker

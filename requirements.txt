@@ -1,2 +1,5 @@
-pillow==10.4.0
-datasets==2.21.0
+nuscenes-devkit==1.1.11
+matplotlib==3.5.3
+numpy==1.23.5
+huggingface-hub==0.27.0
+datasets==2.16.1

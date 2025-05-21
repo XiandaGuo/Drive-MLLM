@@ -1,89 +1,146 @@
-# DriveMLLM: A Benchmark for Spatial Understanding with Multimodal Large Language Models in Autonomous Driving
+# SURDS: Benchmarking Spatial Understanding and Reasoning in Driving Scenarios with Vision Language Models
 
-### [Paper](https://arxiv.org/abs/2411.13112)
 
-> [DriveMLLM: A Benchmark for Spatial Understanding with Multimodal Large Language Models in Autonomous Driving](https://arxiv.org/abs/2411.13112)
+## Dataset
 
-> [Xianda Guo*](https://scholar.google.com/citations?user=jPvOqgYAAAAJ), Ruijun Zhang*, [Yiqun Duan*](https://scholar.google.com.hk/citations?user=NmwjI0AAAAAJ&hl=zh-CN), Yuhang He, Chenming Zhang, Long Chen.
+We extracted and processed data from the [nuScenes](https://www.nuscenes.org/) dataset to create our own [SURDS](https://huggingface.co/datasets/bonbon-rj/SURDS) dataset for training and evaluation purposes.  Due to the large size of the training data, we also provide a separate evaluation-only version: [SURDS_eval](https://huggingface.co/datasets/bonbon-rj/SURDS_eval).  A `metadata.jsonl` file is included for all images, allowing users to conveniently access properties such as `xy2Ds`.
 
-## News 
-- **[2024/11]** Paper released on [arXiv](https://arxiv.org/abs/2411.13112).
 
-## Overall
-![vis](radar.jpg)
 
 ## Getting Started
 
-### 0. Prepare Dataset
+### Environment Setup
 
-We are using the Hugging Face dataset [DriveMLLM](https://huggingface.co/datasets/bonbon-rj/DriveMLLM) for evaluation. The images are sourced from the validation set of [nuScenes](https://www.nuscenes.org/). We have provided a `metadata.jsonl` file for all images, allowing users to easily access properties such as `bboxes2D`.
+To get started, follow the steps below to set up the environment:
+
+```shell
+# Clone the repository and add it to PYTHONPATH
+git clone https://github.com/XiandaGuo/Drive-MLLM.git
+cd Drive-MLLM
+echo 'export PYTHONPATH=$(pwd):$PYTHONPATH' >> ~/.bashrc
+source ~/.bashrc
+
+# Create a Conda environment and install core dependencies
+conda create -n surds python=3.10 
+source activate surds
+pip install -r requirements.txt
+
+# Set up the Qwen2-VL environment
+git clone https://github.com/QwenLM/Qwen2-VL.git
+cd Qwen2-VL
+pip install -r requirements_web_demo.txt
+pip install git+https://github.com/huggingface/transformers@21fac7abba2a37fae86106f87fcf9974fd1e3830 accelerate
+pip install qwen-vl-utils[decord]
+pip install flash-attn --no-build-isolation --no-cache-dir  # (Recommended) 
+pip install transformers==4.50.0 # Stable version for this project
+cd ..
+
+# Install SGLang with acceleration support
+pip install --upgrade pip
+pip install uv
+uv pip install "sglang[all]==0.4.4.post4" --find-links https://flashinfer.ai/whl/cu124/torch2.5/flashinfer-python # Different versions of SGLang may adopt varying acceleration strategies
+```
 
 
-### 1. [Setup Environment](docs/EnvironmentSetup.md)
 
-### 2. VQAs generation
+**Reference Links**:
 
-Run the following code to download the dataset, generate the VQAs, and save them in the `eval_vqas` folder.
+- [Qwen2-VL Official Github Website](https://github.com/QwenLM/Qwen2-VL)
+- [Flash Attention](https://github.com/Dao-AILab/flash-attention)
+- [SGLang installation](https://docs.sglang.ai/start/install.html)
+
+
+
+### VQAs Generation
+
+To generate Visual Question-Answering (VQA) examples for evaluation, run the script below. It downloads the dataset from Hugging Face, applies the prompts provided in `<prompt_dir>`, and stores the generated VQAs in the `<vqas_save_dir>` directory.
+
 ```shell
 python hfdata_to_eval_vqa.py \
---hf_dataset bonbon-rj/DriveMLLM \
---vqas_save_dir eval_vqas
+--hf_dataset bonbon-rj/SURDS_eval \
+--prompt_dir prompt/prompts_reasoning \
+--vqas_save_dir eval_vqas_reasoning
 ```
 
-### 3. Inference
 
-Run inference according to your requirements:
-- For GPT API calls:
+
+### Inference
+
+#### Running Inference with SGLang
+
+To perform inference on the `vqas_dir` prompts using [SGLang](https://github.com/sgl-project/sglang), execute the script below. 
+
+The example below demonstrates inference with the `Qwen/Qwen2.5-VL-3B-Instruct` model on 8 × 80 GB GPUs:
 
 ```shell
-export OPENAI_API_KEY=your_api_key
-
-python inference/get_mllm_output.py \
---model_type gpt \
---model gpt-4o \
---vqas_dir eval_vqas \
---save_dir inference/mllm_outputs
+python inference/get_vlm_output_sglang.py \
+--save_dir inference/vlm_outputs \
+--save_sub_dir qwen \
+--vqas_dir eval_vqas_reasoning \
+--bs_per_req 1850 \
+--sglang_model "Qwen/Qwen2.5-VL-3B-Instruct" \
+--sglang_tpl qwen2-vl \
+--sglang_dtype bfloat16 \
+--sglang_mem 0.9 \
+--sglang_maxreq 64 \
+--sglang_dp 8 \
+--sglang_tp 1
 ```
 
-- For Gemini API calls:
+The results will be saved to the directory: `<save_dir>/<save_sub_dir>/<sglang_model>`.
+
+
+
+#### Generating Random Outputs
+
+To obtain random outputs on the `<vqas_dir>` prompts, run:
 
 ```shell
-export GOOGLE_API_KEY=your_api_key
-
-python inference/get_mllm_output.py \
---model_type gemini \
---model models/gemini-2.0-flash \
---vqas_dir eval_vqas \
---save_dir inference/mllm_outputs
+python inference/get_vlm_output_random.py \
+--save_dir inference/vlm_outputs \
+--vqas_dir eval_vqas_reasoning 
 ```
 
-- For Local LLaVA-Next inference:
+The results will be saved to the directory: `<save_dir>/random/random`.
+
+
+
+#### Adapting Unsupported Models
+
+If your target model is not yet supported by SGLang, you can use `get_vlm_output_random.py` as a template and replace the `generate_random_output` function with your model’s inference implementation.
+
+
+
+### Evaluation
+
+To evaluate all model outputs stored in `<eval_root_dir>`, you can run the following script:
+
 ```shell
-python inference/get_mllm_output.py \
---model_type llava \
---model lmms-lab/llava-onevision-qwen2-7b-si \
---vqas_dir eval_vqas \
---save_dir inference/mllm_outputs
+python evaluation/eval_from_json.py \
+--vqas_dir eval_vqas_reasoning \
+--eval_root_dir inference/vlm_outputs \
+--eval_model_path all \
+--save_dir evaluation/eval_result 
 ```
 
-- For Local QWen2.5-VL inference:
+Alternatively, to evaluate a specific model's output under `<eval_root_dir>`, specify the desired `<eval_model_path>`:
+
 ```shell
-python inference/get_mllm_output.py \
---model_type qwen \
---model Qwen/Qwen2.5-VL-7B-Instruct \
---vqas_dir eval_vqas \
---save_dir inference/mllm_outputs
+python evaluation/eval_from_json.py \
+--vqas_dir eval_vqas_reasoning \
+--eval_root_dir inference/vlm_outputs \
+--eval_model_path qwen/Qwen2.5-VL-3B-Instruct \
+--save_dir evaluation/eval_result 
 ```
 
-After executing the script, the results will be saved in the directory: `{save_dir}/{model_type}/{model}`.
+After running the scripts, the evaluation results will be stored in the directory: `<save_dir>`.
 
 
-## Citation
-```
-@article{DriveMLLM,
-        title={DriveMLLM: A Benchmark for Spatial Understanding with Multimodal Large Language Models in Autonomous Driving},
-        author={Guo, Xianda and Zhang Ruijun and Duan Yiqun and He Yuhang and Zhang, Chenming and Chen, Long},
-        journal={arXiv preprint arXiv:2411.13112},
-        year={2024}
-}
-```
+
+### Training
+
+We employ [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) for supervised fine-tuning (SFT), and adopt the [VLM-R1](https://github.com/om-ai-lab/VLM-R1) framework to train the model using Group Relative Policy Optimization (GRPO).
+
+To prepare SFT data with chain-of-thought (CoT) reasoning, use the provided scripts: `summarize_rules.py` and `gen_cot.py`.
+
+For reinforcement learning, the GRPO implementation is available in `grpo.py`.

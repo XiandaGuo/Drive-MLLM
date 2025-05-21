@@ -1,0 +1,10 @@
+Task Description:
+The primary goal of this task is to accurately identify and provide the coordinates of a specified object within a given image. Your task is to analyze the image, locate the object, and return its position in the form of coordinates [x, y].
+
+Question:
+Where is {} located in the image?
+
+Reason carefully and step-by-step under the <think> tag to ensure logical accuracy and robustness, including any relevant error checks.
+Finally, provide a concise and definitive response in the <answer> tag. Use the following format:
+<think>[Step-by-step reasoning with attention to detail and potential error checks]</think>
+<answer>[Final answer]</answer>

@@ -9,9 +9,6 @@ class Qwen2VLInterface:
     def __init__(self, model_name, not25 = True) -> None:
         
         if not25:
-            # model = Qwen2VLForConditionalGeneration.from_pretrained(
-            #     model_name, torch_dtype="auto", device_map="auto"
-            # )
             self.model = Qwen2VLForConditionalGeneration.from_pretrained(
                 model_name,
                 torch_dtype=torch.bfloat16,
@@ -30,22 +27,18 @@ class Qwen2VLInterface:
 
         
     def inference(self, pil_image: Image.Image, prompt: str, max_tokens: int = 4096):
-        
-        image_base64 = pil2base64(pil_image)
-        image_url = f"data:image;base64,{image_base64}"
-        
-        messages = [
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image",
-                        "image": image_url,
-                    },
-                    {"type": "text", "text": prompt},
-                ],
-            }
-        ]
+
+        content = []
+        if pil_image is not None:
+            image_base64 = pil2base64(pil_image)
+            image_url = f"data:image;base64,{image_base64}"
+            content.append({"type": "image", "image": image_url})
+        content.append({"type": "text", "text": prompt})
+
+        messages = [{
+            "role": "user",
+            "content": content
+        }]
 
         # Preparation for inference
         text = self.processor.apply_chat_template(

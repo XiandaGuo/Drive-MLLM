@@ -1,0 +1,15 @@
+Task Description:
+The primary goal of this task is to determine the relative left-right positioning of the two objects from the camera's perspective.
+
+Question:
+Which is further {}, {} or {}?
+
+Options:
+- {}
+- {}
+- Almost the same
+
+Reason carefully and step-by-step under the <think> tag to ensure logical accuracy and robustness, including any relevant error checks.
+Finally, provide a concise and definitive response in the <answer> tag. Use the following format:
+<think>[Step-by-step reasoning with attention to detail and potential error checks]</think>
+<answer>[Final answer]</answer>
