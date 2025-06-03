@@ -1,5 +1,7 @@
 # SURDS: Benchmarking Spatial Understanding and Reasoning in Driving Scenarios with Vision Language Models
 
+## Update
+We have changed the title from "DriveMLLM: A Benchmark for Spatial Understanding with Multimodal Large Language Models in Autonomous Driving" to "SURDS: Benchmarking Spatial Understanding and Reasoning in Driving Scenarios with Vision Language Models". If you use the data from the first version of DriveMLLM, you can use the v1 branch.
 
 ## Dataset
 
