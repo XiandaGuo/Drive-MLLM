@@ -143,6 +143,19 @@ After running the scripts, the evaluation results will be stored in the director
 
 We employ [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) for supervised fine-tuning (SFT), and adopt the [VLM-R1](https://github.com/om-ai-lab/VLM-R1) framework to train the model using Group Relative Policy Optimization (GRPO).
 
+**Note**: This code is only used for academic purposes; people cannot use this code for anything that might be considered commercial use.
 To prepare SFT data with chain-of-thought (CoT) reasoning, use the provided scripts: `summarize_rules.py` and `gen_cot.py`.
 
 For reinforcement learning, the GRPO implementation is available in `grpo.py`.
+
+## Citation
+```
+@inproceedings{guo2025surds,
+  title={SURDS: Benchmarking Spatial Understanding and Reasoning in Driving Scenarios with Vision Language Models},
+  author={Guo, Xianda and Zhang, Ruijun and Duan, Yiqun and He, Yuhang and Nie, Dujun and Huang, Wenke and Zhang, Chenming and Liu, Shuai and Zhao, Hao and Chen, Long},
+  booktitle={NeurIPS},
+  year={2025}
+}
+```
+
+
